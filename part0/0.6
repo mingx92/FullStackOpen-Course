@@ -1,0 +1,26 @@
+note over browser
+browser starts executing js-code 
+that prevents form default handling
+and registers event handler to form 
+submit button
+end note
+
+note over browser
+event handler creates note and
+note list is re-rendererd by browser
+end note
+
+note over browser
+note is packaged in JSON format
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+browser->server: HTTP POST {"content": "test2", "date": "2022-03-24T17:35:09.724Z"
+}
+
+
+note over server:
+server updates note
+end note
+
+server-->browser: HTML status: 201 (Ok) {"message":"note created"}

@@ -2,7 +2,10 @@ import { useState } from 'react'
 
 const StatisticLine = ({text, value}) => {
   return (
-    <p>{text} {value}</p>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -10,18 +13,22 @@ const Statistics = ({good, bad, neutral}) => {
   let sum = good + bad + neutral;
   if (sum === 0) {
     return (
-      <div>No feedback given </div>
+      <div>No feedback given</div>
     )
   }
 
   return(
     <div>
-      <StatisticLine text="good" value ={good} />
-      <StatisticLine text="neutral" value ={neutral} />
-      <StatisticLine text="bad" value ={bad} />
-      <StatisticLine text="all" value ={sum} />
-      <StatisticLine text="average" value ={sum/3} />
-      <StatisticLine text="positive" value ={`${good / sum * 100} %`} />
+      <table>
+        <tbody>
+            <StatisticLine text="good" value ={good} />
+            <StatisticLine text="neutral" value ={neutral} />
+            <StatisticLine text="bad" value ={bad} />
+            <StatisticLine text="all" value ={sum} />
+            <StatisticLine text="average" value ={sum/3} />
+            <StatisticLine text="positive" value ={`${good / sum * 100} %`} />
+          </tbody>
+      </table>
     </div>
   )
 }
@@ -33,7 +40,6 @@ const MyButton = ({label, clickHandler}) => {
   )
 }
 
-
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -43,7 +49,6 @@ const App = () => {
   let sum= good+neutral+bad;
 
   const clickHandler = (e) => {
-    console.log(e.target.innerText);
     switch (e.target.innerText) {
       case 'good':
         setGood(good+1);

@@ -64,6 +64,14 @@ const App = () => {
     const personArray = persons.map (person => person.id);
     if (!personArray.includes(newName)) {
       setPersons(persons.concat({name:newName, number: newNumber, id:newName}));
+      const newPerson = { name:newName, 
+                          number: newNumber, 
+                          id:newName
+                        };
+      axios
+      .post('http://localhost:3001/persons', newPerson).then(response => {
+        console.log(response);
+      })
     } else {
       alert (`${newName} is already added to phonebook`)
     }

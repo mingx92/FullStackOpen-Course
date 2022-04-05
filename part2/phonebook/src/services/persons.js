@@ -7,11 +7,15 @@ const getAll = () => {
 
 
 const create = (newPerson) => {
-    return axios.post('http://localhost:3001/persons', newPerson)
+    return axios.post(baseUrl, newPerson)
 }
 
+const remove = (id) => {
+    return axios.delete(baseUrl+ '/' + id)
+}
 
 export default {
     getAll : getAll,
-    create: create
+    create: create,
+    remove: remove
 }

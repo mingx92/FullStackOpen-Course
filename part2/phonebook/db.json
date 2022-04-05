@@ -21,19 +21,9 @@
       "id": 4
     },
     {
-      "name": "test1",
-      "number": "test2",
-      "id": "test1"
-    },
-    {
       "name": "123",
-      "number": "456",
-      "id": "123"
-    },
-    {
-      "name": "lincoln",
-      "number": "ibraham",
-      "id": "lincoln"
+      "number": "123",
+      "id": 5
     }
   ]
 }

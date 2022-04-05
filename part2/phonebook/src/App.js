@@ -9,10 +9,19 @@ const Filter = ({filterName, filterNameHandler}) => {
   )
 }
 
-const Persons = ({recordsToShow}) => {
+const Persons = ({recordsToShow, deleteHandler}) => {
+
   return (
     <div>
-      {recordsToShow.map( person => <div key={person.name}> {person.name} {person.number}</div>)}
+      {recordsToShow.map( person => 
+                          <div key={person.id}> 
+                            {person.name} 
+                            {person.number}
+                            <button id={person.id} onClick={deleteHandler}> delete </button>
+                          </div>
+                        )
+      }
+
     </div>
   )
 }
@@ -42,7 +51,6 @@ const App = () => {
     personService
     .getAll()
     .then( response => {
-      console.log('promise fulfilled');
       setPersons(response.data);
     })
   },[])
@@ -61,22 +69,36 @@ const App = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const personArray = persons.map (person => person.id);
+    const personArray = persons.map (person => person.name);
     if (!personArray.includes(newName)) {
-      setPersons(persons.concat({name:newName, number: newNumber, id:newName}));
+      //setPersons(persons.concat({name:newName, number: newNumber}));
       const newPerson = { name:newName, 
-                          number: newNumber, 
-                          id:newName
-                        };
-
-      personService.create(newPerson);
+                          number: newNumber};
+      personService.create(newPerson).then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName("");
+        setNewNumber("");
+      });
 
     } else {
-      alert (`${newName} is already added to phonebook`)
+      
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        const personToUpdate = persons.find(person => person.name == newName);
+        const updatedPerson =  {...personToUpdate, number: newNumber};
+        personService.update(updatedPerson.id, updatedPerson).then(response => {
+        setPersons(persons.map(person => person.id!= updatedPerson.id ? person : response.data));
+        })      
+      }
     }
-    console.log(recordsToShow);
   }
 
+  const deleteHandler = e => {
+    const nameToDelete = persons.find(person => person.id == e.target.id).name;
+    if (window.confirm(`Delete ${nameToDelete} ?`)){
+      personService.remove(e.target.id);
+      setPersons(persons.filter(person => person.id!= e.target.id));
+    }   
+  }
 
   let recordsToShow = !(filterName === '')
   ? persons.filter(person => {
@@ -84,8 +106,6 @@ const App = () => {
       return searchStatus>=0? true : false;
     }) 
   : persons;
-
-  
    
   return (
     <div>
@@ -101,7 +121,7 @@ const App = () => {
         numberHandler={numberHandler} />
 
       <h3>Numbers</h3>
-      <Persons recordsToShow={recordsToShow}/>
+      <Persons recordsToShow={recordsToShow} deleteHandler={deleteHandler}/>
 
     </div>
   )

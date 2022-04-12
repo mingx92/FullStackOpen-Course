@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
+const Notification = ({message}) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className = 'notification'>{message}</div>
+  )
+}
+
 const Filter = ({filterName, filterNameHandler}) => {
   return (
    <div>
@@ -27,7 +37,8 @@ const Persons = ({recordsToShow, deleteHandler}) => {
 }
 
 const PersonForm =  ({submitHandler, newName, newNumber, nameHandler, numberHandler}) => {
-  return(
+
+  return (
     <div>
       <form onSubmit= {submitHandler}>
         <div>name: <input value ={newName} onChange={nameHandler}/></div>
@@ -42,10 +53,11 @@ const PersonForm =  ({submitHandler, newName, newNumber, nameHandler, numberHand
 
 
 const App = () => {
-  const [persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
-  const [newNumber, setNewNumber] = useState('')
-  const [filterName, setFilterName] = useState('')
+  const [newNumber, setNewNumber] = useState('');
+  const [message, setNewMessage] = useState(null);
+  const [filterName, setFilterName] = useState('');
 
   useEffect( () => {
     personService
@@ -75,9 +87,11 @@ const App = () => {
       const newPerson = { name:newName, 
                           number: newNumber};
       personService.create(newPerson).then(response => {
-        setPersons(persons.concat(response.data))
+        setPersons(persons.concat(response.data));
         setNewName("");
         setNewNumber("");
+        setNewMessage(`Added ${newPerson.name}`);
+        setTimeout(() => {setNewMessage(null)},5000); 
       });
 
     } else {
@@ -87,12 +101,13 @@ const App = () => {
         const updatedPerson =  {...personToUpdate, number: newNumber};
         personService.update(updatedPerson.id, updatedPerson).then(response => {
         setPersons(persons.map(person => person.id!= updatedPerson.id ? person : response.data));
-        })      
-      }
+        setNewMessage(`Number for ${updatedPerson.name} has been updated`);
+        setTimeout(() => {setNewMessage(null)},10000)      
+      })}
     }
   }
 
-  const deleteHandler = e => {
+  const deleteHandler = (e) => {
     const nameToDelete = persons.find(person => person.id == e.target.id).name;
     if (window.confirm(`Delete ${nameToDelete} ?`)){
       personService.remove(e.target.id);
@@ -109,6 +124,7 @@ const App = () => {
    
   return (
     <div>
+      <Notification message = {message} />
       <h2>Phonebook</h2>
       <Filter filterName={filterName} filterNameHandler={filterNameHandler}/>  
 

@@ -103,6 +103,9 @@ const App = () => {
         setPersons(persons.map(person => person.id!= updatedPerson.id ? person : response.data));
         setNewMessage(`Number for ${updatedPerson.name} has been updated`);
         setTimeout(() => {setNewMessage(null)},10000)      
+      }).catch(() => {
+        setNewMessage(`Information of ${newName} has already been deleted from server`);
+        setTimeout(() => {setNewMessage(null)},10000)  
       })}
     }
   }

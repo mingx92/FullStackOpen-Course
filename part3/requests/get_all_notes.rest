@@ -1,1 +1,7 @@
-GET http://localhost:3001/api/notes
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{ 
+    "name": "Harry", 
+    "number": "687543432"
+}

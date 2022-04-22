@@ -54,17 +54,28 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     
-    console.log(request.body)
-    console.log(request.headers)
-    const newId = contacts.length > 0
-    ? Math.round(Math.random()*99999)
-    : 0
-
     const person = request.body
-    person.id =  newId
+    if (person.name && person.number) {
+        if (!contacts.find(ppl => ppl.name === person.name)) {
+            const newId = contacts.length > 0
+            ? Math.round(Math.random()*99999)
+            : 0
+            person.id =  newId
+            contacts = contacts.concat(person)
+            response.json(contacts)
 
-    contacts = contacts.concat(person)
-    response.json(contacts)
+        } else {
+            return response.status(400).json({
+                error: 'name must be unique'
+            })
+        }   
+       
+    } else {
+        return response.status(400).json({
+            error: 'name or number missing'
+        })
+    }
+    
   })
 
 

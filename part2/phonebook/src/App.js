@@ -25,8 +25,8 @@ const Persons = ({recordsToShow, deleteHandler}) => {
     <div>
       {recordsToShow.map( person => 
                           <div key={person.id}> 
-                            {person.name} 
-                            {person.number}
+                            {person.name}
+                            {person.phonenumber}
                             <button id={person.id} onClick={deleteHandler}> delete </button>
                           </div>
                         )
@@ -85,7 +85,7 @@ const App = () => {
     if (!personArray.includes(newName)) {
       //setPersons(persons.concat({name:newName, number: newNumber}));
       const newPerson = { name:newName, 
-                          number: newNumber};
+                          phonenumber: newNumber};
       personService.create(newPerson).then(response => {
         setPersons(persons.concat(newPerson));
         setNewName("");
@@ -98,7 +98,7 @@ const App = () => {
       
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
         const personToUpdate = persons.find(person => person.name == newName);
-        const updatedPerson =  {...personToUpdate, number: newNumber};
+        const updatedPerson =  {...personToUpdate, phonenumber: newNumber};
         personService.update(updatedPerson.id, updatedPerson).then(response => {
         setPersons(persons.map(person => person.id!= updatedPerson.id ? person : response.data));
         setNewMessage(`Number for ${updatedPerson.name} has been updated`);

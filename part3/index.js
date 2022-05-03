@@ -15,6 +15,7 @@ app.use(cors())
 app.use(express.static('build'))
 
 app.get('/api/persons', (request, response) => {
+  console.log("Getting People Info")
   Contact.find({}).then(contacts => {
     response.json(contacts)
   })
@@ -27,27 +28,31 @@ app.get('/api/info', (request, response) => {
   })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    const person = contacts.find(person => person.id === id)
-    if (person) {
-        response.json(person);
-    } else {
-        response.status(404).end();
-    } 
+    Contact.findById(request.params.id).then(contact => {
+      if (contact) {
+        response.json(contact)
+      } else {
+          response.status(404).end()
+        }     
+    })
+    .catch(error => {
+      console.log(error => next(error))
+    })
   })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    contacts = contacts.filter(note => note.id !== id)
-    response.status(204).end()
+    Contact.findByIdAndRemove(request.params.id).then(result => {
+      response.status(204).end()
+    }) 
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
     
     const person = request.body
-    if (person.name && person.number) {
+    if (person.name && person.phonenumber) {
       const contact = new Contact({
-        name: person.name
+        name: person.name,
         phonenumber: person.phonenumber
       })
 
@@ -76,6 +81,26 @@ app.post('/api/persons', (request, response) => {
     }
     
   })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+  
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+// this has to be the last loaded middleware.
+app.use(errorHandler)
 
 
 const PORT = process.env.PORT || 3001

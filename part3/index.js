@@ -1,18 +1,18 @@
-require('dotenv').config()
 const express = require('express')
 const app = express()
-var morgan = require('morgan')
 const cors = require('cors')
-const Contact = require('/models/contact')
+require('dotenv').config()
+const Contact = require('./models/contact')
 
-app.use(express.static('build'))
 app.use(express.json())
+
+var morgan = require('morgan')
 morgan.token('post_body', function (req, res) {return JSON.stringify(req.body)})
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post_body'))
+
 app.use(cors())
 
-
-const Contact = mongoose.model('Contact', PhonebookSchema)
+app.use(express.static('build'))
 
 app.get('/api/persons', (request, response) => {
   Contact.find({}).then(contacts => {
@@ -46,19 +46,28 @@ app.post('/api/persons', (request, response) => {
     
     const person = request.body
     if (person.name && person.number) {
-        if (!contacts.find(ppl => ppl.name === person.name)) {
-            const newId = contacts.length > 0
-            ? Math.round(Math.random()*99999)
-            : 0
-            person.id =  newId
-            contacts = contacts.concat(person)
-            response.json(contacts)
+      const contact = new Contact({
+        name: person.name
+        phonenumber: person.phonenumber
+      })
 
-        } else {
-            return response.status(400).json({
-                error: 'name must be unique'
-            })
-        }   
+      contact.save().then(savedContact => {
+        response.json(savedContact)
+      })
+      
+        // if (!contacts.find(ppl => ppl.name === person.name)) {
+        //     const newId = contacts.length > 0
+        //     ? Math.round(Math.random()*99999)
+        //     : 0
+        //     person.id =  newId
+        //     contacts = contacts.concat(person)
+        //     response.json(contacts)
+
+        // } else {
+        //     return response.status(400).json({
+        //         error: 'name must be unique'
+        //     })
+        // }   
        
     } else {
         return response.status(400).json({

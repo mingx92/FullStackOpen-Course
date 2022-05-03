@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
 
-const url =
-  `mongodb+srv://fullstack:${password}@testcluster.ox1ey.mongodb.net/PhonebookDB?retryWrites=true&w=majority`
-
+const url = process.env.MONGODB_URI
+  
 mongoose.connect(url)
   .then(result => {
     console.log('connected to MongoDB')
@@ -24,4 +23,4 @@ PhonebookSchema.set('toJSON', {
     }
   })
 
-  module.exports = mongoose.model('Contact', noteSchema)
+  module.exports = mongoose.model('Contact', PhonebookSchema)

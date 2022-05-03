@@ -87,7 +87,7 @@ const App = () => {
       const newPerson = { name:newName, 
                           phonenumber: newNumber};
       personService.create(newPerson).then(response => {
-        setPersons(persons.concat(newPerson));
+        setPersons(persons.concat({...newPerson, id: response.data.id}));
         setNewName("");
         setNewNumber("");
         setNewMessage(`Added ${newPerson.name}`);

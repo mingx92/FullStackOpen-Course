@@ -1,1 +1,0 @@
-Backend test application is currently hosted on https://myapp94556115.herokuapp.com/

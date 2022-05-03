@@ -92,6 +92,11 @@ const App = () => {
         setNewNumber("");
         setNewMessage(`Added ${newPerson.name}`);
         setTimeout(() => {setNewMessage(null)},5000); 
+      })
+      .catch(error => {
+        console.log(error.response.data);
+        setNewMessage(`Person Validation failed: Specified Name: ('${newName}') is shorter than the minimum allowed length (3)`);
+        setTimeout(() => {setNewMessage(null)},10000)  
       });
 
     } else {

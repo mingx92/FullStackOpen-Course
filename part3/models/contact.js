@@ -13,13 +13,18 @@ mongoose.connect(url)
 const PhonebookSchema = new mongoose.Schema({
   name: {
     type: String,
-    minlength:3,
+    minlength:[3,'name:minlength'],
     required:true
   },
   phonenumber: {
     type: String,
-    minlength:1,
-    required:true
+    validate: {
+      validator: function(v) {
+        return /^\d{2}-\d{6,}$|^\d{3}-\d{5,}$/.test(v);
+      },
+      message: 'phonenumber:customvalidator'
+    },
+    required: true
   }
 })
 

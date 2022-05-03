@@ -95,8 +95,13 @@ const App = () => {
       })
       .catch(error => {
         console.log(error.response.data);
-        setNewMessage(`Person Validation failed: Specified Name: ('${newName}') is shorter than the minimum allowed length (3)`);
-        setTimeout(() => {setNewMessage(null)},10000)  
+        if (error.response.data.error.includes("name:minlength")) {
+          setNewMessage(`Person Validation failed: Specified Name: ('${newName}') is shorter than the minimum allowed length (3)`);
+          setTimeout(() => {setNewMessage(null)},10000)  
+        } else if (error.response.data.error.includes("phonenumber:customvalidator")) {
+          setNewMessage(`Phone Number Validation failed: Specified Phone Number: ('${newNumber}) does not correspond to the required format XX-XXXXXX or XXX-XXXXX`);
+          setTimeout(() => {setNewMessage(null)},10000) 
+        }
       });
 
     } else {
@@ -108,9 +113,18 @@ const App = () => {
         setPersons(persons.map(person => person.id!= updatedPerson.id ? person : response.data));
         setNewMessage(`Number for ${updatedPerson.name} has been updated`);
         setTimeout(() => {setNewMessage(null)},10000)      
-      }).catch(() => {
-        setNewMessage(`Information of ${newName} has already been deleted from server`);
-        setTimeout(() => {setNewMessage(null)},10000)  
+      }).catch( error => {
+
+        if (error.response.data.error.includes("name:minlength")) {
+          setNewMessage(`Person Validation failed: Specified Name: ('${newName}') is shorter than the minimum allowed length (3)`);
+          setTimeout(() => {setNewMessage(null)},10000)  
+        } else if (error.response.data.error.includes("phonenumber:customvalidator")) {
+          setNewMessage(`Phone Number Validation failed: Specified Phone Number: ('${newNumber}) does not correspond to the required format XX-XXXXXX or XXX-XXXXX`);
+          setTimeout(() => {setNewMessage(null)},10000) 
+        } else {
+          setNewMessage(`Information of ${newName} has already been deleted from server`);
+          setTimeout(() => {setNewMessage(null)},10000)
+        } 
       })}
     }
   }

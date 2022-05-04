@@ -107,10 +107,10 @@ const App = () => {
     } else {
       
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
-        const personToUpdate = persons.find(person => person.name == newName);
+        const personToUpdate = persons.find(person => person.name === newName);
         const updatedPerson =  {...personToUpdate, phonenumber: newNumber};
         personService.update(updatedPerson.id, updatedPerson).then(response => {
-        setPersons(persons.map(person => person.id!= updatedPerson.id ? person : response.data));
+        setPersons(persons.map(person => person.id!== updatedPerson.id ? person : response.data));
         setNewMessage(`Number for ${updatedPerson.name} has been updated`);
         setTimeout(() => {setNewMessage(null)},10000)      
       }).catch( error => {
@@ -130,10 +130,10 @@ const App = () => {
   }
 
   const deleteHandler = (e) => {
-    const nameToDelete = persons.find(person => person.id == e.target.id).name;
+    const nameToDelete = persons.find(person => person.id === e.target.id).name;
     if (window.confirm(`Delete ${nameToDelete} ?`)){
       personService.remove(e.target.id);
-      setPersons(persons.filter(person => person.id!= e.target.id));
+      setPersons(persons.filter(person => person.id!== e.target.id));
     }   
   }
 

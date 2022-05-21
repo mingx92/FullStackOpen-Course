@@ -1,6 +1,6 @@
-const totalLikes= require('../utils/totalLikes')
+const favouriteBlog= require('../utils/favouriteBlog')
 
-describe('total likes', () => {
+describe('favourite Blog', () => {
     const blogs = [
         {
           _id: "5a422a851b54a676234d17f7",
@@ -52,8 +52,15 @@ describe('total likes', () => {
         }  
       ]
   
-    test('when list has only one blog, equals the likes of that', () => {
-      const result = totalLikes.totalLikes(blogs)
-      expect(result).toBe(36)
+    test('find favourite blog', () => {
+      const result = favouriteBlog.favouriteBlog(blogs)
+      expect(result).toMatchObject({
+        _id: "5a422b3a1b54a676234d17f9",
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+        likes: 12,
+        __v: 0
+      })
     })
   })

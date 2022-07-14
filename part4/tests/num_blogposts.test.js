@@ -25,7 +25,7 @@ beforeEach(async () => {
     await Blog.deleteMany({})
     let blogObject = new Blog(initialBlogPosts[0])
     await blogObject.save()
-    blogObject = new Blog(initialBlogPosts[1])
+    blogObject = new Blog(initialNotes[1])
     await blogObject.save()
   })
 

@@ -1,13 +1,23 @@
-const Notification = ({ message }) => {
+import e from "cors"
+
+const Notification = ({ message, color }) => {
   if (message === null) {
     return null
   }
 
-  return (
-    <div className="error">
-      {message}
-    </div>
-  )
+  if (color = 'green') {
+    return (
+      <div className="notification">
+        {message}
+      </div>
+    )
+  } else {
+    return (
+      <div className="error">
+        {message}
+      </div>
+    )
+  }
 }
 
 export default Notification

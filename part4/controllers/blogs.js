@@ -26,7 +26,7 @@ blogsRouter.post('/', async (request, response) => {
   const user = await User.findById(decodedToken.id)
   const blog = new Blog({
     title: body.title,
-    author: body.url,
+    author: body.author,
     url: body.url,
     likes: body.likes,
     user: user._id

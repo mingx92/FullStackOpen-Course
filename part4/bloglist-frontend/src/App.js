@@ -9,10 +9,12 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState(null)
-  const [author, setAuthor] = useState(null)
-  const [url, setURL] = useState(null)
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setURL] = useState("")
   const [errorMessage, setErrorMessage] = useState(null)
+  const [newBlogMessage, setNewBlogMessage] = useState(null)
+  
  
 
   useEffect(() => {
@@ -54,12 +56,21 @@ const App = () => {
   }
 
   const handleCreateBlog = async (event) => {
-    const blog = await blogService.create(
+    event.preventDefault()
+    
+    await blogService.create(
       {title, author, url}
     )
+    setNewBlogMessage(`New Blog registered from a author ${author}!`)
+    
+    setTimeout(() => {
+      setNewBlogMessage(null)
+    }, 5000)
+
     setTitle('')
     setAuthor('')
     setURL('')
+
   }
 
   const handleLogout = async (event) => {
@@ -70,7 +81,7 @@ const App = () => {
 
   const loginForm = () => (
     <div>
-      <Notification message={errorMessage} />
+      <Notification message={errorMessage} color = 'red' />
       <form onSubmit={handleLogin}>
         <h2>Log in to application</h2>
         <div>
@@ -98,8 +109,10 @@ const App = () => {
 
 
   const blogForm = () => (
+    
     <div>
      <h2><u>Blogs Page</u></h2>
+     <Notification message={newBlogMessage} color = 'green'/>
      <p>User "<u>{user.name}</u>" has logged-in. <button onClick = {handleLogout}>logout</button></p> 
      <h2><u>Create New Blogs</u></h2>
      <form onSubmit={handleCreateBlog}>

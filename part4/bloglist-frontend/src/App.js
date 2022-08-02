@@ -1,28 +1,17 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import BlogForm from './components/newBlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setURL] = useState("")
+
   const [errorMessage, setErrorMessage] = useState(null)
-  const [newBlogMessage, setNewBlogMessage] = useState(null)
   
- 
-
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -53,24 +42,6 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
-  }
-
-  const handleCreateBlog = async (event) => {
-    event.preventDefault()
-    
-    await blogService.create(
-      {title, author, url}
-    )
-    setNewBlogMessage(`New Blog registered from a author ${author}!`)
-    
-    setTimeout(() => {
-      setNewBlogMessage(null)
-    }, 5000)
-
-    setTitle('')
-    setAuthor('')
-    setURL('')
-
   }
 
   const handleLogout = async (event) => {
@@ -107,56 +78,14 @@ const App = () => {
     </div>     
   )
 
-
-  const blogForm = () => (
-    
-    <div>
-     <h2><u>Blogs Page</u></h2>
-     <Notification message={newBlogMessage} color = 'green'/>
-     <p>User "<u>{user.name}</u>" has logged-in. <button onClick = {handleLogout}>logout</button></p> 
-     <h2><u>Create New Blogs</u></h2>
-     <form onSubmit={handleCreateBlog}>
-        <div>
-            <div>Title:</div>
-            <input
-              type="text"
-              value={title}
-              name="title"
-              onChange={({ target }) => setTitle(target.value)}
-            />
-        </div>
-        <div>
-            <div>Author:</div>
-            <input
-              type="text"
-              value={author}
-              name="author"
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-        </div>  <div>
-            <div>URL:</div>
-            <input
-              type="text"
-              value={url}
-              name="url"
-              onChange={({ target }) => setURL(target.value)}
-            />
-        </div>
-        <button type="submit">Create</button>
-      </form> 
-
-     <h2><u>List of Saved Blogs</u></h2>
-     {blogs.map(blog =>
-     <Blog key={blog.id} blog={blog} />
-       )}
-    </div>
-  )
-
   return (
     <div>
       {user === null?
         loginForm():
-        blogForm()
+        <BlogForm
+          user = {user}
+          handleLogout = {handleLogout}
+        />
       }
     </div>
   )

@@ -19,9 +19,9 @@ const BlogForm = ({
 
     const handleCreateBlog = async (event) => {
         event.preventDefault()
-        
+        let likes = 0
         await blogService.create(
-          {title, author, url}
+          {title, author, url, likes}
         )
         setNewBlogMessage(`New Blog registered from a author ${author}!`)
         
@@ -80,7 +80,7 @@ const BlogForm = ({
         </Togglable>
         <h2><u>List of Saved Blogs</u></h2>
         {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog}/>
         )}
         </div>
      )}

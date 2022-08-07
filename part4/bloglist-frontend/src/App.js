@@ -52,12 +52,13 @@ const App = () => {
   }
 
   const likeHandler = async (event, blog) => {
-    blogService.update(blog.id,
+    const updatedBlog = await blogService.update(blog.id,
       {
         ...blog,
         likes: blog.likes + 1
       }
     )
+    setBlogs(blogs.filter(bg => bg.id !==  blog.id).concat(updatedBlog))
   }
 
   const handleLogout = async (event) => {

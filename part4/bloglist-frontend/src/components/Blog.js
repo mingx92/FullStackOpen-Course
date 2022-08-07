@@ -1,7 +1,7 @@
-import {useState, useEffect, useRef } from 'react'
+import {useState} from 'react'
+import blogService from '../services/blogs'
 
-
-const Blog = ({blog}) => {
+const Blog = ({blog, incrementLikeHandler}) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,16 +10,30 @@ const Blog = ({blog}) => {
     marginBottom: 5
   }
 
+  const btnStyle = {
+    backgroundColor: '#008CBA',
+    color: 'white'
+  }
+
+
   const [blogView, updateblogView] = useState('collapsed')
-  const handleChangeBlogView = (e) =>{
-    e.preventDefault()
+
+  const handleChangeBlogView = (event) =>{
+    event.preventDefault()
     if (blogView === 'collapsed') {
       updateblogView('expanded')
     } else {
       updateblogView('collapsed')
     } 
   }
-  
+
+  const removeBlogHandler = (event) => {
+    event.preventDefault()
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)) {
+      blogService.remove(blog.id);
+    }
+  }
+
   if (blogView === 'collapsed') {
     return (
     <div style={blogStyle}>
@@ -31,8 +45,9 @@ const Blog = ({blog}) => {
       <div style={blogStyle}>
         {blog.title} {blog.author}  <button onClick = {handleChangeBlogView}>Hide</button> <br />
         {blog.url}<br />
-        likes {blog.likes} <button>like</button><br />
-        {blog.id}
+        likes {blog.likes} <button onClick ={incrementLikeHandler}>Like</button><br />
+        {blog.id}<br />
+        <button style={btnStyle} onClick = {removeBlogHandler} >Remove</button>
       </div>  
       )
   } else {

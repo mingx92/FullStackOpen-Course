@@ -39,7 +39,19 @@ const BlogForm = ({
         blogService.getAll().then(blogs =>
           setBlogs(blogs)
         )  
-      }, [])
+      }, [blogs])
+
+        
+    const incrementLikeHandler = async (event, blog) => {
+      event.preventDefault()
+      const updatedBlog = await blogService.update(blog.id,
+        {
+          ...blogs,
+          likes: blog.likes + 1
+        }
+      )
+      setBlogs(blogs.map(x => x.id === blog.id ? updatedBlog : x))
+    }
 
     return (
         <div>
@@ -79,8 +91,10 @@ const BlogForm = ({
             </form>
         </Togglable>
         <h2><u>List of Saved Blogs</u></h2>
-        {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog}/>
+        {blogs
+        .sort((a, b) => a.likes > b.likes ? -1 : 1 )
+        .map(blog =>
+        <Blog key={blog.id} blog={blog} incrementLikeHandler={(event) => incrementLikeHandler(event, blog)}/>
         )}
         </div>
      )}

@@ -2,12 +2,15 @@
 
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, screen } from '@testing-library/react'
+import { screen, render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
-
-test('Default Render for Blog Component', () => {
-  const sampleblog = {
+describe('<Blog />', () => {
+  let user
+  let mockHandler
+  let container
+  let sampleBlog = {
     user: 12345,
     title: 'Title',
     author: 'author',
@@ -15,10 +18,26 @@ test('Default Render for Blog Component', () => {
     likes: 1
   }
 
-  const { container } = render(<Blog blog={sampleblog} />)
-  screen.debug(container)
-  expect(container).toHaveTextContent(sampleblog.title)
-  expect(container).toHaveTextContent(sampleblog.author)
-  expect(container).not.toHaveTextContent(sampleblog.url)
-  expect(container).not.toHaveTextContent('likes')
+  beforeEach(() => {
+    container = render(<Blog blog={sampleBlog} handleLikes={mockHandler} />).container
+    mockHandler = jest.fn()
+    user = userEvent.setup()
+  })
+
+  test('Default View Render Testing', () => {
+    const div = container.querySelector('.blog')
+    expect(div).toHaveTextContent(sampleBlog.title)
+    expect(div).toHaveTextContent(sampleBlog.author)
+    expect(div).not.toHaveTextContent(sampleBlog.url)
+    expect(div).not.toHaveTextContent('likes')
+  })
+
+  test('Expanded View Render Testing', async() => {
+    const div = container.querySelector('.blog')
+    const button = screen.getByText('View')
+    await user.click(button)
+    expect(div).toHaveTextContent(sampleBlog.url)
+    expect(div).toHaveTextContent('likes')
+  })
+
 })

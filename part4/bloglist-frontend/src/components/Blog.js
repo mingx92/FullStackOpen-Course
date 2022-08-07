@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const Blog = ({blog, incrementLikeHandler}) => {
   const blogStyle = {
@@ -53,6 +54,11 @@ const Blog = ({blog, incrementLikeHandler}) => {
   } else {
     return <div>Issue with Current Blog View State {blogView}</div>
   }
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  incrementLikeHandler: PropTypes.func.isRequired,
 }
 
 export default Blog

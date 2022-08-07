@@ -1,11 +1,9 @@
-import e from "cors"
-
 const Notification = ({ message, color }) => {
   if (message === null) {
     return null
   }
 
-  if (color = 'green') {
+  if (color === 'green') {
     return (
       <div className="notification">
         {message}

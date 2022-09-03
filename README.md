@@ -1,5 +1,5 @@
 # FullStackOpen-Course
-Submission for FullStackOpen Course - "Deep Dive Into Modern Web Development"
+Submission for FullStackOpen Course - "Deep Dive Into Modern Web Development" by Ming Xiang
 
 The course will introduce you to modern JavaScript-based web development, and the main focus is on building single page applications with ReactJS that uses REACT APIs built with Node.js.
 The course will delve into topics such as:

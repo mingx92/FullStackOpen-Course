@@ -1,12 +1,20 @@
-# FullStackOpen-Course
-Submission for FullStackOpen Course - "Deep Dive Into Modern Web Development" by Ming Xiang
+# Deep Dive Into Modern Web Development - FULL STACK OPEN COURSE
 
-The course will introduce you to modern JavaScript-based web development, and the main focus is on building single page applications with ReactJS that uses REACT APIs built with Node.js.
-The course will delve into topics such as:
+This repository contains source code implementation of assignments for University of Helsinki ECTS's introductory course to modern web development with React, RESTful and GraphQL web services, implemented with Node.js. https://fullstackopen.com/en/
 
-1. React
-2. Redux
-3. Node.js
-4. MongoDB
-5. GraphQL
-6. Typescript
+There are a total of 13 chapters
+
+<li>Fundamentals of Web apps</li>
+<li>Introduction to React</li>
+<li>Communicating with server</li>
+<li>Programming a server with NodeJS and Express</li>
+<li>Testing Express servers, user administration</li>
+<li>Testing React apps</li>
+<li>Advanced state management</li>
+<li>React router, custom hooks, styling app with CSS and webpack</li>
+<li>GraphQL</li>
+<li>TypeScript</li>
+<li>React Native</li>
+<li>CI/CD</li>
+<li>Containers</li>
+<li>Using relational databases</li>
